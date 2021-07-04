@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'org.hardway'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+def pulsarVersion = '2.7.2'
+
+dependencies {
+    compile group: 'org.apache.pulsar', name: 'pulsar-client', version: pulsarVersion
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "SimpleReader"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+application {
+    mainClassName = 'SimpleReader'
+}
